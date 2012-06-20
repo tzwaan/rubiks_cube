@@ -18,4 +18,6 @@ public class Cube {
 			back[i] = 5;
 		}
 	}
+	
+	
 }
