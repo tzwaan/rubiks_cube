@@ -9,5 +9,11 @@ public class RubiksCubeActivity extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
+        Cube cube = new Cube();
+        cube.printCube();
+        cube.turnFaceTop(1);
+        cube.printCube();
+        cube.turnFaceFront(0);
+        cube.printCube();
     }
 }
