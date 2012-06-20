@@ -1,3 +1,19 @@
+/*
+ * Cube.java
+ * 
+ * dit is een virtuele rubiks cube. Hij bestaat uit 6 arrays van 8 getallen. Deze
+ * representeren de verschillende vlakjes op de kanten van de kubus. Hierbij is
+ * iedere array 1 kant van de kubus waarbij met een ronddraaiende beweging met de
+ * klok mee over het vlak wordt gegaan.
+ * Het middelste blokje van het vlak staat vast, dus staat niet in de array.
+ * 
+ * de "turnFace*" functies kunnen gebruikt worden om de desbetreffende kanten te
+ * draaien. Hierbij draait "turnFaceFront" het voorste vlak, "turnFaceRight" het
+ * rechtervlak, etcetera.
+ * de parameter van deze functies geeft de draairichting aan met;
+ * 		0 = linksom
+ * 		1 = rechtsom
+ */
 package rubiks.Cube;
 
 public class Cube {
