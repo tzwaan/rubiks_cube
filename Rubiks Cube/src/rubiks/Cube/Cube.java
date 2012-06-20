@@ -15,6 +15,7 @@
  * 		1 = rechtsom
  */
 package rubiks.Cube;
+import java.util.Random;
 
 public class Cube {
 	int[] top = new int[8];
@@ -217,6 +218,22 @@ public class Cube {
 				left[i] = front[i];
 				front[i] = right[i];
 				right[i] = temp2;
+			}
+		}
+	}
+	
+	public void shuffleCube() {
+		Random gen = new Random();
+		for (int i = 0; i < 20; i ++) {
+			int r = gen.nextInt(6);
+			int d = gen.nextInt(2);
+			switch(r) {
+			case 0: turnFaceBottom(d); break;
+			case 1: turnFaceTop(d); break;
+			case 2: turnFaceFront(d); break;
+			case 3: turnFaceRight(d); break;
+			case 4: turnFaceLeft(d); break;
+			case 5: turnFaceBack(d); break;
 			}
 		}
 	}

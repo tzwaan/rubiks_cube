@@ -13,7 +13,7 @@ public class RubiksCubeActivity extends Activity {
         cube.printCube();
         cube.turnFaceTop(1);
         cube.printCube();
-        cube.turnFaceFront(0);
+        cube.shuffleCube();
         cube.printCube();
     }
 }
