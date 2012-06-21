@@ -73,23 +73,64 @@ public class Cube {
 					temp[2-y][x][2] = blocks[x][y][z][1];
 				}
 			}
-		}
-		
-		for (int x = 0; x < 3; x++) {
-			for (int y = 0; y < 3; y++) {
-				blocks[x][y][z][0] = temp[x][y][0];
-				blocks[x][y][z][1] = temp[x][y][1];
-				blocks[x][y][z][2] = temp[x][y][2];
+			
+			for (int x = 0; x < 3; x++) {
+				for (int y = 0; y < 3; y++) {
+					blocks[x][y][z][0] = temp[x][y][0];
+					blocks[x][y][z][1] = temp[x][y][1];
+					blocks[x][y][z][2] = temp[x][y][2];
+				}
 			}
 		}
 	}
 	
 	public void turnAroundY(int y, int amount) {
+		int[][][] temp = new int[3][3][3];
 		
+		if (amount == 0) return;
+		
+		for (int j = 0; j < amount; j++) {
+			for (int x = 0; x < 3; x++) {
+				for (int z = 0; z < 3; z++) {
+					temp[2-z][x][1] = blocks[x][y][z][1];
+					temp[2-z][x][0] = blocks[x][y][z][2];
+					temp[2-z][x][2] = blocks[x][y][z][0];
+				}
+			}
+			
+			for (int x = 0; x < 3; x++) {
+				for (int z = 0; z < 3; z++) {
+					blocks[x][y][z][0] = temp[x][z][0];
+					blocks[x][y][z][1] = temp[x][z][1];
+					blocks[x][y][z][2] = temp[x][z][2];
+					
+				}
+			}
+		}
 	}
 	
 	public void turnAroundX(int x, int amount) {
+		int[][][] temp = new int[3][3][3];
 		
+		if (amount == 0) return;
+		
+		for (int j = 0; j < amount; j++) {
+			for (int y = 0; y < 3; y++) {
+				for (int z = 0; z < 3; z++) {
+					temp[2-z][y][2] = blocks[x][y][z][2];
+					temp[2-z][y][0] = blocks[x][y][z][1];
+					temp[2-z][y][1] = blocks[x][y][z][0];
+				}
+			}
+			
+			for (int y = 0; y < 3; y++) {
+				for (int z = 0; z < 3; z++) {
+					blocks[x][y][z][0] = temp[y][z][0];
+					blocks[x][y][z][1] = temp[y][z][1];
+					blocks[x][y][z][2] = temp[y][z][2];
+				}
+			}
+		}
 	}
 	
 	public void printCube() {
@@ -107,6 +148,43 @@ public class Cube {
 			output = output.concat(" \n");
 		}
 		System.out.println(output);
+	}
+	
+	public void printCubeFaces() {
+		String output = "";
+		for (int y = 0; y < 3; y++) {
+			output = output.concat("    ");
+			for (int x = 0; x < 3; x++) {
+				output = output.concat("" + blocks[x][y][0][0]);
+			}
+			output = output.concat("\n");
+		}
+		for (int z = 0; z < 3; z++) {
+			for (int y = 0; y < 3; y++) {
+				output = output.concat("" + blocks[0][y][z][2]);
+			}
+			output = output.concat(" ");
+			for (int x = 0; x < 3; x++) {
+				output = output.concat("" + blocks[x][2][z][1]);
+			}
+			output = output.concat(" ");
+			for (int y = 2; y >= 0; y--) {
+				output = output.concat("" + blocks[2][y][z][2]);
+			}
+			output = output.concat(" ");
+			output = output.concat("" + blocks[2][0][z][1]);
+			output = output.concat("" + blocks[1][0][z][1]);
+			output = output.concat("" + blocks[0][0][z][1]);
+			output = output.concat("\n");
+		}
+		for (int y = 2; y >= 0; y--) {
+			output = output.concat("    ");
+			for (int x = 0; x < 3; x++) {
+				output = output.concat("" + blocks[x][y][2][0]);
+			}
+			output = output.concat("\n");
+		}
+		System.out.println(output + " \n");
 	}
 }
 
