@@ -16,6 +16,68 @@
  */
 package rubiks.Cube;
 import java.util.Random;
+/*
+ * kleuren:
+ * 1 = wit
+ * 2 = rood
+ * 3 = groen
+ * 4 = oranje
+ * 5 = blauw
+ * 6 = geel
+ * (0 = zwart)
+ */
+public class Cube {
+	int[][][][] blocks = new int[3][3][3][3];
+	
+	public Cube() {
+		for (int z = 0; z < 3; z++) {
+			for (int y = 0; y < 3; y++) {	
+				for (int x = 0; x < 3; x++) {
+					for (int color = 0; color < 3; color++) {
+						blocks[x][y][z][color] = 0;
+					}
+				}
+			}
+		}
+		for (int x = 0; x < 3; x++) {
+			for (int y = 0; y < 3; y++) {
+				blocks[x][y][0][0] = 1;
+				blocks[x][y][2][0] = 6;
+			}
+		}
+		for (int y = 0; y < 3; y++) {
+			for (int z = 0; z < 3; z++) {
+				blocks[0][y][z][2] = 3;
+				blocks[2][y][z][2] = 5;
+			}
+		}
+		for (int x = 0; x < 3; x++) {
+			for (int z = 0; z < 3; z++) {
+				blocks[x][0][z][1] = 4;
+				blocks[x][2][z][1] = 2;
+			}
+		}
+	}
+	
+	public void printCube() {
+		String output = "";
+		for (int z = 0; z < 3; z++) {
+			for (int y = 0; y < 3; y++) {	
+				for (int x = 0; x < 3; x++) {
+					for (int color = 0; color < 3; color++) {
+						output = output.concat("" + blocks[x][y][z][color]);
+					}
+					output = output.concat(" ");
+				}
+				output = output.concat("\n");
+			}
+			output = output.concat(" \n");
+		}
+		System.out.println(output);
+	}
+}
+/*
+ de oude code
 
 public class Cube {
 	int[] top = new int[8];
@@ -244,3 +306,4 @@ public class Cube {
 		System.out.println("bottom:\n" + bottom[0] + " " + bottom[1] + " " + bottom[2] + "\n" + bottom[7] + " 4 " + bottom[3] + "\n" + bottom[6] + " " + bottom[5] + " " + bottom[4]);
 	}
 }
+ */

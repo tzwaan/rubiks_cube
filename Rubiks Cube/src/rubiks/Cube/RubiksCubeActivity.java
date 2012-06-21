@@ -11,9 +11,5 @@ public class RubiksCubeActivity extends Activity {
         setContentView(R.layout.main);
         Cube cube = new Cube();
         cube.printCube();
-        cube.turnFaceTop(1);
-        cube.printCube();
-        cube.shuffleCube();
-        cube.printCube();
     }
 }
