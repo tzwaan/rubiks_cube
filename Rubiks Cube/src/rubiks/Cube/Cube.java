@@ -15,7 +15,8 @@
  * 		1 = rechtsom
  */
 package rubiks.Cube;
-import java.util.Random;
+//import java.util.Random;
+
 /*
  * kleuren:
  * 1 = wit
@@ -59,6 +60,38 @@ public class Cube {
 		}
 	}
 	
+	public void turnAroundZ(int z, int amount) {
+		int[][][] temp = new int[3][3][3];
+		
+		if (amount == 0) return;
+		
+		for (int j = 0; j < amount; j++) {
+			for (int x = 0; x < 3; x++) {
+				for (int y = 0; y < 3; y++) {
+					temp[2-y][x][0] = blocks[x][y][z][0];
+					temp[2-y][x][1] = blocks[x][y][z][2];
+					temp[2-y][x][2] = blocks[x][y][z][1];
+				}
+			}
+		}
+		
+		for (int x = 0; x < 3; x++) {
+			for (int y = 0; y < 3; y++) {
+				blocks[x][y][z][0] = temp[x][y][0];
+				blocks[x][y][z][1] = temp[x][y][1];
+				blocks[x][y][z][2] = temp[x][y][2];
+			}
+		}
+	}
+	
+	public void turnAroundY(int y, int amount) {
+		
+	}
+	
+	public void turnAroundX(int x, int amount) {
+		
+	}
+	
 	public void printCube() {
 		String output = "";
 		for (int z = 0; z < 3; z++) {
@@ -76,6 +109,7 @@ public class Cube {
 		System.out.println(output);
 	}
 }
+
 /*
  de oude code
 
