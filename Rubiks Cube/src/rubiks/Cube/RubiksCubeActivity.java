@@ -17,5 +17,8 @@ public class RubiksCubeActivity extends Activity {
         cube.turnAroundZ(1, 2);
         cube.printCube();
         cube.printCubeFaces();
+        cube.shuffleCube();
+        cube.printCube();
+        cube.printCubeFaces();
     }
 }

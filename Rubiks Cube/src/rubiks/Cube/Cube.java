@@ -15,7 +15,7 @@
  * 		1 = rechtsom
  */
 package rubiks.Cube;
-//import java.util.Random;
+import java.util.Random;
 
 /*
  * kleuren:
@@ -185,6 +185,17 @@ public class Cube {
 			output = output.concat("\n");
 		}
 		System.out.println(output + " \n");
+	}
+	
+	public void shuffleCube() {
+		Random gen = new Random();
+		for (int i = 0; i < 20; i++) {
+			switch(gen.nextInt(3)) {
+			case 0: turnAroundX(gen.nextInt(3), gen.nextInt(3)+1); break;
+			case 1: turnAroundY(gen.nextInt(3), gen.nextInt(3)+1); break;
+			case 2: turnAroundZ(gen.nextInt(3), gen.nextInt(3)+1); break;
+			}
+		}
 	}
 }
 
