@@ -26,7 +26,6 @@ public class CubeRenderer implements Renderer {
 	private Rubik mCube = new Rubik();
     private float mCubeRotation;
 
-    @Override
     public void onSurfaceCreated(GL10 gl, EGLConfig config) {
         gl.glClearColor(0.0f, 0.0f, 0.0f, 0.5f); 
             
@@ -41,7 +40,6 @@ public class CubeRenderer implements Renderer {
             
     }
 
-    @Override
     public void onDrawFrame(GL10 gl) {
         gl.glClear(GL10.GL_COLOR_BUFFER_BIT | GL10.GL_DEPTH_BUFFER_BIT);
         gl.glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
@@ -120,7 +118,6 @@ public class CubeRenderer implements Renderer {
         }
     }
 
-    @Override
     public void onSurfaceChanged(GL10 gl, int width, int height) {
         gl.glViewport(0, 0, width, height);
         gl.glMatrixMode(GL10.GL_PROJECTION);
