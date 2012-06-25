@@ -614,7 +614,9 @@ public class Cube {
 		
 		while (middleEdgesSolved != 0) {
 			int[] b = findEdge(middleEdgesSolved, (middleEdgesSolved - 1) % 4 + 2);
-			
+			if (b[0] == 0 && b[1] == 0 && b[2] == 0) {System.out.println("impossible blocklocation found, faulty coordinates in findEdge function"); System.exit(37);}
+			if (b[2] == 0) {System.out.println("this should not be possible in this stage of the solver; quitting now"); System.exit(39);}
+			if (b[2] == 1)
 			
 			
 			middleEdgesSolved = middleEdgesCheck();
