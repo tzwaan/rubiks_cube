@@ -24,6 +24,8 @@ public class RubiksCubeActivity extends Activity {
 		cube.solveTopCross();
 		cube.solveTopCorners();
 		
+		cube.solveMiddleEdges();
+		
 		cube.printCubeFaces();
 		
 	//	do {
