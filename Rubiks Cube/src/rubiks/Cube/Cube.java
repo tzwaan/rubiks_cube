@@ -85,19 +85,6 @@ public class Cube {
 		}
 	}
 	
-	public float[] nrToRGB(int a) {
-		switch (a) {
-		case 1: {float[] r = {1,1,1}; return r;}
-		case 2: {float[] r = {1,0,0}; return r;}
-		case 3: {float[] r = {0,1,0}; return r;}
-		case 4: {float[] r = {1,0.5f,0}; return r;}
-		case 5: {float[] r = {0,0,1}; return r;}
-		case 6: {float[] r = {1,1,0}; return r;}
-		}
-		float[] r = {0,0,0};
-		return r;
-	}
-	
 	/*
 	 * draai een van de (x,y)-vlakken rond de z as.
 	 * hierbij is 'z' het vlak dat je draait getelt vanaf
@@ -391,19 +378,10 @@ public class Cube {
 	}
 	
 	public int topFaceCornerCheck() {
-		if (!(blocks[0][2][0][0] == 1 && blocks[0][2][0][1] == 2 && blocks[0][2][0][2] == 3)) return 2;
-		if (!(blocks[0][0][0][0] == 1 && blocks[0][0][0][1] == 4 && blocks[0][0][0][2] == 3)) return 3;
-		if (!(blocks[2][0][0][0] == 1 && blocks[2][0][0][1] == 4 && blocks[2][0][0][2] == 5)) return 4;
-		if (!(blocks[2][2][0][0] == 1 && blocks[2][2][0][1] == 2 && blocks[2][2][0][2] == 5)) return 5;
-		
-		return 0;
-	}
-	
-	public int middleEdgesCheck() {
-		if (!(blocks[0][2][1][1] == 2 && blocks[0][2][1][2] == 3)) return 2;
-		if (!(blocks[0][0][1][1] == 4 && blocks[0][0][1][2] == 3)) return 3;
-		if (!(blocks[2][0][1][1] == 4 && blocks[2][0][1][2] == 5)) return 4;
-		if (!(blocks[2][2][1][1] == 2 && blocks[2][2][1][2] == 5)) return 5;
+		if(!(blocks[0][2][0][0] == 1 && blocks[0][2][0][1] == 2 && blocks[0][2][0][2] == 3)) return 2;
+		if(!(blocks[0][0][0][0] == 1 && blocks[0][0][0][1] == 4 && blocks[0][0][0][2] == 3)) return 3;
+		if(!(blocks[2][0][0][0] == 1 && blocks[2][0][0][1] == 4 && blocks[2][0][0][2] == 5)) return 4;
+		if(!(blocks[2][2][0][0] == 1 && blocks[2][2][0][1] == 2 && blocks[2][2][0][2] == 5)) return 5;
 		
 		return 0;
 	}
@@ -561,17 +539,15 @@ public class Cube {
 			int[] b = findCorner(1, topFaceCornersSolved, (topFaceCornersSolved - 1) % 4 + 2);
 			if (b[0] == 1) {System.out.println("impossible blocklocation found"); System.exit(38);}
 			System.out.println("" + b[0] + "-" + b[1] + "-" + b[2]);
-			printCubeFaces();
 			if (b[2] == 0) {
 				turnAroundY(b[1], 3-b[0], true);
 				turnAroundZ(2, 1, true);
 				turnAroundY(b[1], b[0]+1, true);
 			}
 			b = findCorner(1, topFaceCornersSolved, (topFaceCornersSolved - 1) % 4 + 2);
-			System.out.println("" + b[0] + "-" + b[1] + "-" + b[2]);
 			if (b[0] == 1) {System.out.println("impossible blocklocation found"); System.exit(38);}
-			//check for debugging (should not be necessary)
-			if (b[2] == 2) {
+			//check for debuggin (should not be necessary)
+			if (b[2] == 0) {
 				if (b[0] == 0 && b[1] == 2) turnAroundZ(2, topFaceCornersSolved + 2, true);
 				else if (b[0] == 0 && b[1] == 0) turnAroundZ(2, topFaceCornersSolved + 1, true);
 				else if (b[0] == 2 && b[1] == 0) turnAroundZ(2, topFaceCornersSolved, true);
@@ -580,46 +556,9 @@ public class Cube {
 			b = findCorner(1, topFaceCornersSolved, (topFaceCornersSolved - 1) % 4 + 2);
 			if (b[0] == 1) {System.out.println("impossible blocklocation found"); System.exit(38);}
 			//check for debugging (should not be necessary)
-			if (b[2] == 2) {
-				if (blocks[b[0]][b[1]][b[2]][0] == 1) {
-					turnAroundY(b[1], 3-b[0], true);
-					turnAroundZ(2, 2, true);
-					turnAroundY(b[1], b[0]+1, true);
-					if (b[0] == b[1]) turnAroundZ(2, 1, true);
-					else turnAroundZ(2, 3, true);
-					turnAroundY(b[1], 3-b[0], true);
-					if (b[0] == b[1]) turnAroundZ(2, 3, true);
-					else turnAroundZ(2, 1, true);
-					turnAroundY(b[1], b[0]+1, true);
-				}
-				else if (blocks[b[0]][b[1]][b[2]][1] == 1) {
-					turnAroundY(b[1], 3-b[0], true);
-					if (b[0] == b[1]) turnAroundZ(2, 3, true);
-					else turnAroundZ(2, 1, true);
-					turnAroundY(b[1], b[0]+1, true);
-				}
-				else if (blocks[b[0]][b[1]][b[2]][2] == 1) {
-					turnAroundX(b[0], 3-b[1], true);
-					if (b[0] == b[1]) turnAroundZ(2, 1, true);
-					else turnAroundZ(2, 3, true);
-					turnAroundX(b[0], b[1]+1, true);
-				}
+			if (b[2] == 0) {
+				
 			}
-			topFaceCornersSolved = topFaceCornerCheck();
-		}
-	}
-	
-	public void solveMiddleEdges() {
-		int middleEdgesSolved = middleEdgesCheck();
-		
-		while (middleEdgesSolved != 0) {
-			int[] b = findEdge(middleEdgesSolved, (middleEdgesSolved - 1) % 4 + 2);
-			if (b[0] == 0 && b[1] == 0 && b[2] == 0) {System.out.println("impossible blocklocation found, faulty coordinates in findEdge function"); System.exit(37);}
-			if (b[2] == 0) {System.out.println("this should not be possible in this stage of the solver; quitting now"); System.exit(39);}
-			if (b[2] == 1)
-			
-			
-			middleEdgesSolved = middleEdgesCheck();
 		}
 	}
 	
