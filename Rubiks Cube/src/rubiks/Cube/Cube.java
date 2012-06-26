@@ -123,9 +123,9 @@ public class Cube {
 	 * draait de hele kubus rond de z-as
 	 */
 	public void rotateAroundZ(int amount) {
-			turnAroundZ(0, amount, true);
-			turnAroundZ(1, amount, true);
-			turnAroundZ(2, amount, true);
+        turnAroundZ(0, amount, true);
+        turnAroundZ(1, amount, true);
+        turnAroundZ(2, amount, true);
 	}
 	
 	/*
@@ -287,9 +287,9 @@ public class Cube {
 			b = gen.nextInt(3);
 			c = gen.nextInt(3) + 1;
 			switch(a) {
-			case 0: turnAroundX(b, c, true); break;
-			case 1: turnAroundY(b, c, true); break;
-			case 2: turnAroundZ(b, c, true); break;
+                case 0: turnAroundX(b, c, true); break;
+                case 1: turnAroundY(b, c, true); break;
+                case 2: turnAroundZ(b, c, true); break;
 			}
 		}
 	}
@@ -386,6 +386,15 @@ public class Cube {
 		return 0;
 	}
 	
+	public int middleEdgesCheck() {
+		if (!(blocks[0][2][1][1] == 2 && blocks[0][2][1][2] == 3)) return 2;
+		if (!(blocks[0][0][1][1] == 4 && blocks[0][0][1][2] == 3)) return 3;
+		if (!(blocks[2][0][1][1] == 4 && blocks[2][0][1][2] == 5)) return 4;
+		if (!(blocks[2][2][1][1] == 2 && blocks[2][2][1][2] == 5)) return 5;
+		
+		return 0;
+	}
+	
 	public int[] findEdge(int a, int b) {
 		if ((blocks[1][2][0][0] == a && blocks[1][2][0][1] == b) || (blocks[1][2][0][0] == b && blocks[1][2][0][1] == a)) {int[] r = {1,2,0}; return r;};
 		if ((blocks[0][1][0][0] == a && blocks[0][1][0][2] == b) || (blocks[0][1][0][0] == b && blocks[0][1][0][2] == a)) {int[] r = {0,1,0}; return r;};
@@ -421,7 +430,7 @@ public class Cube {
 		if ((blocks[2][2][0][0] == a || blocks[2][2][0][0] == b || blocks[2][2][0][0] == c) &&
 			(blocks[2][2][0][1] == a || blocks[2][2][0][1] == b || blocks[2][2][0][1] == c) &&
 			(blocks[2][2][0][2] == a || blocks[2][2][0][2] == b || blocks[2][2][0][2] == c)) {int[] r = {2,2,0}; return r;}
-
+        
 		
 		if ((blocks[0][2][2][0] == a || blocks[0][2][2][0] == b || blocks[0][2][2][0] == c) &&
 			(blocks[0][2][2][1] == a || blocks[0][2][2][1] == b || blocks[0][2][2][1] == c) &&
@@ -519,7 +528,7 @@ public class Cube {
 				else if (b[0] == 0 && b[1] == 1) turnAroundZ(2, topFaceCrossSolved+1, true);
 				else if (b[0] == 1 && b[1] == 0) turnAroundZ(2, topFaceCrossSolved, true);
 				else if (b[0] == 2 && b[1] == 1) turnAroundZ(2, topFaceCrossSolved+3, true);
-
+                
 				if (topFaceCrossSolved == 2) turnAroundY(2, 2, true);
 				else if (topFaceCrossSolved == 3) turnAroundX(0, 2, true);
 				else if (topFaceCrossSolved == 4) turnAroundY(0, 2, true);
@@ -559,6 +568,101 @@ public class Cube {
 			if (b[2] == 0) {
 				
 			}
+			topFaceCornersSolved = topFaceCornerCheck();
+		}
+	}
+	
+	public void solveMiddleEdges() {
+		int middleEdgesSolved = middleEdgesCheck();
+		boolean wrongFlipped;
+		
+		while (middleEdgesSolved != 0) {
+			wrongFlipped = false;
+			int[] b = findEdge(middleEdgesSolved, (middleEdgesSolved - 1) % 4 + 2);
+			System.out.println(b[0] + "-" + b[1] + "-" + b[2]);
+			printCubeFaces();
+			if (b[0] == 0 && b[1] == 0 && b[2] == 0) {System.out.println("impossible blocklocation found, faulty coordinates in findEdge function"); System.exit(37);}
+			if (b[2] == 0) {System.out.println("this should not be possible in this stage of the solver; quitting now"); System.exit(39);}
+			if (b[2] == 1) {
+				turnAroundY(b[1], 3-b[0], true);
+				if (b[0] == b[1]) turnAroundZ(2, 3, true);
+				else turnAroundZ(2, 1, true);
+				turnAroundY(b[1], b[0]+1, true);
+				if (b[0] == b[1]) turnAroundZ(2, 1, true);
+				else turnAroundZ(2, 3, true);
+				turnAroundX(b[0], 3-b[1], true);
+				if (b[0] == b[1]) turnAroundZ(2, 1, true);
+				else turnAroundZ(2, 3, true);
+				turnAroundX(b[0], b[1]+1, true);
+			}
+			b = findEdge(middleEdgesSolved, (middleEdgesSolved - 1) % 4 + 2);
+			//debugging safety check
+			if (b[2] == 2) {
+				if (blocks[b[0]][b[1]][b[2]][0] == middleEdgesSolved) {
+					if (b[0] == 1 && b[1] == 2) turnAroundZ(2, middleEdgesSolved+3, true);
+					else if (b[0] == 0 && b[1] == 1) turnAroundZ(2, middleEdgesSolved+2, true);
+					else if (b[0] == 1 && b[1] == 0) turnAroundZ(2, middleEdgesSolved+1, true);
+					else if (b[0] == 2 && b[1] == 1) turnAroundZ(2, middleEdgesSolved, true);
+					wrongFlipped = true;
+				}
+				else {
+					if (b[0] == 1 && b[1] == 2) turnAroundZ(2, middleEdgesSolved+2, true);
+					else if (b[0] == 0 && b[1] == 1) turnAroundZ(2, middleEdgesSolved+1, true);
+					else if (b[0] == 1 && b[1] == 0) turnAroundZ(2, middleEdgesSolved, true);
+					else if (b[0] == 2 && b[1] == 1) turnAroundZ(2, middleEdgesSolved+3, true);
+				}
+			}
+			b = findEdge(middleEdgesSolved, (middleEdgesSolved - 1) % 4 + 2);
+			//debugging safety check
+			if (b[2] == 2) {
+				if (wrongFlipped) {
+					if (b[0] == 1) {
+						turnAroundZ(2, 1, true);
+						turnAroundX(b[1], b[1]+1, true);
+						turnAroundZ(2, 1, true);
+						turnAroundX(b[1], 3-b[1], true);
+						turnAroundZ(2, 3, true);
+						turnAroundY(b[1], 3-b[1], true);
+						turnAroundZ(2, 3, true);
+						turnAroundY(b[1], b[1]+1, true);
+					}
+					else if(b[1] == 1) {
+						turnAroundZ(2, 1, true);
+						turnAroundY(2-b[0], 3-b[0], true);
+						turnAroundZ(2, 1, true);
+						turnAroundY(2-b[0], b[0]+1, true);
+						turnAroundZ(2, 3, true);
+						turnAroundX(b[0], b[0]+1, true);
+						turnAroundZ(2, 3, true);
+						turnAroundX(b[0], 3-b[0], true);
+					}
+				}
+				else {
+					if (b[0] == 1) {
+						turnAroundZ(2, 3, true);
+						turnAroundX(2-b[1], 3-b[1], true);
+						turnAroundZ(2, 3, true);
+						turnAroundX(2-b[1], b[1]+1, true);
+						turnAroundZ(2, 1, true);
+						turnAroundY(b[1], b[1]+1, true);
+						turnAroundZ(2, 1, true);
+						turnAroundY(b[1], 3-b[1], true);
+					}
+					else if(b[1] == 1) {
+						turnAroundZ(2, 3, true);
+						turnAroundY(b[0], 3-b[0], true);
+						turnAroundZ(2, 3, true);
+						turnAroundY(b[0], b[0]+1, true);
+						turnAroundZ(2, 1, true);
+						turnAroundX(b[0], 3-b[0], true);
+						turnAroundZ(2, 1, true);
+						turnAroundX(b[0], b[0]+1, true);
+					}
+				}
+			}
+			
+			
+			middleEdgesSolved = middleEdgesCheck();
 		}
 	}
 	
@@ -584,236 +688,240 @@ public class Cube {
 			printCubeFaces();
 		}
 	}
+	
+	public void clearSolution() {
+		solution = "";
+	}
 }
 
 /*
  de oude code
-
-public class Cube {
-	int[] top = new int[8];
-	int[] left = new int[8];
-	int[] front = new int[8];
-	int[] right = new int[8];
-	int[] bottom = new int[8];
-	int[] back = new int[8];
-	
-	public Cube() {
-		for(int i = 0; i < 8; i++) {
-			top[i] = 0;
-			left[i] = 1;
-			front[i] = 2;
-			right[i] = 3;
-			bottom[i] = 4;
-			back[i] = 5;
-		}
-	}
-	
-	public void turnFaceTop(int direction) {
-		int[] temp1 = new int[8];
-		int temp2;
-		
-		for (int i = 0; i < 8; i++) {
-			temp1[(i + 6 - (4*direction)) % 8] = top[i];
-		}
-		for (int i = 0; i < 8; i++) {
-			top[i] = temp1[i];
-		}
-		
-		if (direction == 1) {
-			for(int i = 0; i < 3; i++) {
-				temp2 = front[i];
-				front[i] = right[i];
-				right[i] = back[i];
-				back[i] = left[i];
-				left[i] = temp2;
-			}
-		}
-		else {
-			for(int i = 0; i < 3; i ++) {
-				temp2 = front[i];
-				front[i] = left[i];
-				left[i] = back[i];
-				back[i] = right[i];
-				right[i] = temp2;
-			}
-		}	
-	}
-	
-	public void turnFaceFront(int direction) {
-		int[] temp1 = new int[8];
-		int temp2;
-		
-		for (int i = 0; i < 8; i++) {
-			temp1[(i + 6 - (4*direction)) % 8] = front[i];
-		}
-		for (int i = 0; i < 8; i++) {
-			front[i] = temp1[i];
-		}
-		
-		if (direction == 1) {
-			for (int i = 0; i < 3; i++) {
-				temp2 = bottom[i];
-				bottom[i] = right[(i + 6) % 8];
-				right[(i + 6) % 8] = top[i + 4];
-				top[i + 4] = left[i + 2];
-				left [i + 2] = temp2;
-			}
-		}
-		else {
-			for (int i = 0; i < 3; i++) {
-				temp2 = bottom[i];
-				bottom[i] = left[i + 2];
-				left[i + 2] = top[i + 4];
-				top[i + 4] = right[(i + 6) % 8];
-				right[(i + 6) % 8] = temp2;
-			}
-		}
-	}
-	
-	public void turnFaceBack(int direction) {
-		int[] temp1 = new int[8];
-		int temp2;
-		
-		for (int i = 0; i < 8; i++) {
-			temp1[(i + 6 - (4*direction)) % 8] = back[i];
-		}
-		for (int i = 0; i < 8; i++) {
-			back[i] = temp1[i];
-		}
-		
-		if (direction == 1) {
-			for (int i = 0; i < 3; i++) {
-				temp2 = bottom[i + 4];
-				bottom[i + 4] = left[(i + 6) % 8];
-				left[(i + 6) % 8] = top[i];
-				top[i] = right[i + 2];
-				right[i + 2] = temp2;
-			}
-		}
-		else {
-			for (int i = 0; i < 3; i++) {
-				temp2 = bottom[i + 4];
-				bottom[i + 4] = right[i + 2];
-				right[i + 2] = top[i];
-				top[i] = left[(i + 6) % 8];
-				left[(i + 6) % 8] = temp2;
-			}
-		}
-	}
-	
-	public void turnFaceRight(int direction) {
-		int[] temp1 = new int[8];
-		int temp2;
-		
-		for (int i = 0; i < 8; i++) {
-			temp1[(i + 6 - (4*direction)) % 8] = right[i];
-		}
-		for (int i = 0; i < 8; i++) {
-			right[i] = temp1[i];
-		}
-		
-		if (direction == 1) {
-			for (int i = 2; i < 5; i++) {
-				temp2 = bottom[i];
-				bottom[i] = back[(i + 4) % 8];
-				back[(i + 4) % 8] = top[i];
-				top[i] = front[i];
-				front[i] = temp2;
-			}
-		}
-		else {
-			for (int i = 2; i < 5; i++) {
-				temp2 = bottom[i];
-				bottom[i] = front[i];
-				front[i] = top[i];
-				top[i] = back[(i + 4) % 8];
-				back[(i + 4) % 8] = temp2;
-			}
-		}
-	}
-	
-	public void turnFaceLeft(int direction) {
-		int[] temp1 = new int[8];
-		int temp2;
-		
-		for (int i = 0; i < 8; i++) {
-			temp1[(i + 6 - (4*direction)) % 8] = left[i];
-		}
-		for (int i = 0; i < 8; i++) {
-			left[i] = temp1[i];
-		}
-		
-		if (direction == 1) {
-			for (int i = 6; i < 9; i++) {
-				temp2 = bottom[i % 8];
-				bottom[i % 8] = front[i % 8];
-				front[i % 8] = top[i % 8];
-				top[i % 8] = back[(i + 4) % 8];
-				back[(i + 4) % 8] = temp2;
-			}
-		}
-		else {
-			for (int i = 6; i < 9; i++) {
-				temp2 = bottom[i % 8];
-				bottom[i % 8] = back[(i + 4) % 8];
-				back[(i + 4) % 8] = top[i % 8];
-				top[i % 8] = front[i % 8];
-				front[i % 8] = temp2;
-			}
-		}
-	}
-	
-	public void turnFaceBottom(int direction) {
-		int[] temp1 = new int[8];
-		int temp2;
-		
-		for (int i = 0; i < 8; i++) {
-			temp1[(i + 6 - (4*direction)) % 8] = bottom[i];
-		}
-		for (int i = 0; i < 8; i++) {
-			bottom[i] = temp1[i];
-		}
-		
-		if(direction == 1) {
-			for (int i = 4; i < 7; i ++) {
-				temp2 = back[i];
-				back[i] = right[i];
-				right[i] = front[i];
-				front[i] = left[i];
-				left[i] = temp2;
-			}
-		}
-		else {
-			for (int i = 4; i < 7; i ++) {
-				temp2 = back[i];
-				back[i] = left[i];
-				left[i] = front[i];
-				front[i] = right[i];
-				right[i] = temp2;
-			}
-		}
-	}
-	
-	public void shuffleCube() {
-		Random gen = new Random();
-		for (int i = 0; i < 20; i ++) {
-			int r = gen.nextInt(6);
-			int d = gen.nextInt(2);
-			switch(r) {
-			case 0: turnFaceBottom(d); break;
-			case 1: turnFaceTop(d); break;
-			case 2: turnFaceFront(d); break;
-			case 3: turnFaceRight(d); break;
-			case 4: turnFaceLeft(d); break;
-			case 5: turnFaceBack(d); break;
-			}
-		}
-	}
-	
-	public void printCube() {
-		System.out.println("top:\n" + top[0] + " " + top[1] + " " + top[2] + "\n" + top[7] + " 0 " + top[3] + "\n" + top[6] + " " + top[5] + " " + top[4]);
-		System.out.println("front:\n" + front[0] + " " + front[1] + " " + front[2] + "\n" + front[7] + " 2 " + front[3] + "\n" + front[6] + " " + front[5] + " " + front[4]);
-		System.out.println("bottom:\n" + bottom[0] + " " + bottom[1] + " " + bottom[2] + "\n" + bottom[7] + " 4 " + bottom[3] + "\n" + bottom[6] + " " + bottom[5] + " " + bottom[4]);
-	}
-}
+ 
+ public class Cube {
+ int[] top = new int[8];
+ int[] left = new int[8];
+ int[] front = new int[8];
+ int[] right = new int[8];
+ int[] bottom = new int[8];
+ int[] back = new int[8];
+ 
+ public Cube() {
+ for(int i = 0; i < 8; i++) {
+ top[i] = 0;
+ left[i] = 1;
+ front[i] = 2;
+ right[i] = 3;
+ bottom[i] = 4;
+ back[i] = 5;
+ }
+ }
+ 
+ public void turnFaceTop(int direction) {
+ int[] temp1 = new int[8];
+ int temp2;
+ 
+ for (int i = 0; i < 8; i++) {
+ temp1[(i + 6 - (4*direction)) % 8] = top[i];
+ }
+ for (int i = 0; i < 8; i++) {
+ top[i] = temp1[i];
+ }
+ 
+ if (direction == 1) {
+ for(int i = 0; i < 3; i++) {
+ temp2 = front[i];
+ front[i] = right[i];
+ right[i] = back[i];
+ back[i] = left[i];
+ left[i] = temp2;
+ }
+ }
+ else {
+ for(int i = 0; i < 3; i ++) {
+ temp2 = front[i];
+ front[i] = left[i];
+ left[i] = back[i];
+ back[i] = right[i];
+ right[i] = temp2;
+ }
+ }	
+ }
+ 
+ public void turnFaceFront(int direction) {
+ int[] temp1 = new int[8];
+ int temp2;
+ 
+ for (int i = 0; i < 8; i++) {
+ temp1[(i + 6 - (4*direction)) % 8] = front[i];
+ }
+ for (int i = 0; i < 8; i++) {
+ front[i] = temp1[i];
+ }
+ 
+ if (direction == 1) {
+ for (int i = 0; i < 3; i++) {
+ temp2 = bottom[i];
+ bottom[i] = right[(i + 6) % 8];
+ right[(i + 6) % 8] = top[i + 4];
+ top[i + 4] = left[i + 2];
+ left [i + 2] = temp2;
+ }
+ }
+ else {
+ for (int i = 0; i < 3; i++) {
+ temp2 = bottom[i];
+ bottom[i] = left[i + 2];
+ left[i + 2] = top[i + 4];
+ top[i + 4] = right[(i + 6) % 8];
+ right[(i + 6) % 8] = temp2;
+ }
+ }
+ }
+ 
+ public void turnFaceBack(int direction) {
+ int[] temp1 = new int[8];
+ int temp2;
+ 
+ for (int i = 0; i < 8; i++) {
+ temp1[(i + 6 - (4*direction)) % 8] = back[i];
+ }
+ for (int i = 0; i < 8; i++) {
+ back[i] = temp1[i];
+ }
+ 
+ if (direction == 1) {
+ for (int i = 0; i < 3; i++) {
+ temp2 = bottom[i + 4];
+ bottom[i + 4] = left[(i + 6) % 8];
+ left[(i + 6) % 8] = top[i];
+ top[i] = right[i + 2];
+ right[i + 2] = temp2;
+ }
+ }
+ else {
+ for (int i = 0; i < 3; i++) {
+ temp2 = bottom[i + 4];
+ bottom[i + 4] = right[i + 2];
+ right[i + 2] = top[i];
+ top[i] = left[(i + 6) % 8];
+ left[(i + 6) % 8] = temp2;
+ }
+ }
+ }
+ 
+ public void turnFaceRight(int direction) {
+ int[] temp1 = new int[8];
+ int temp2;
+ 
+ for (int i = 0; i < 8; i++) {
+ temp1[(i + 6 - (4*direction)) % 8] = right[i];
+ }
+ for (int i = 0; i < 8; i++) {
+ right[i] = temp1[i];
+ }
+ 
+ if (direction == 1) {
+ for (int i = 2; i < 5; i++) {
+ temp2 = bottom[i];
+ bottom[i] = back[(i + 4) % 8];
+ back[(i + 4) % 8] = top[i];
+ top[i] = front[i];
+ front[i] = temp2;
+ }
+ }
+ else {
+ for (int i = 2; i < 5; i++) {
+ temp2 = bottom[i];
+ bottom[i] = front[i];
+ front[i] = top[i];
+ top[i] = back[(i + 4) % 8];
+ back[(i + 4) % 8] = temp2;
+ }
+ }
+ }
+ 
+ public void turnFaceLeft(int direction) {
+ int[] temp1 = new int[8];
+ int temp2;
+ 
+ for (int i = 0; i < 8; i++) {
+ temp1[(i + 6 - (4*direction)) % 8] = left[i];
+ }
+ for (int i = 0; i < 8; i++) {
+ left[i] = temp1[i];
+ }
+ 
+ if (direction == 1) {
+ for (int i = 6; i < 9; i++) {
+ temp2 = bottom[i % 8];
+ bottom[i % 8] = front[i % 8];
+ front[i % 8] = top[i % 8];
+ top[i % 8] = back[(i + 4) % 8];
+ back[(i + 4) % 8] = temp2;
+ }
+ }
+ else {
+ for (int i = 6; i < 9; i++) {
+ temp2 = bottom[i % 8];
+ bottom[i % 8] = back[(i + 4) % 8];
+ back[(i + 4) % 8] = top[i % 8];
+ top[i % 8] = front[i % 8];
+ front[i % 8] = temp2;
+ }
+ }
+ }
+ 
+ public void turnFaceBottom(int direction) {
+ int[] temp1 = new int[8];
+ int temp2;
+ 
+ for (int i = 0; i < 8; i++) {
+ temp1[(i + 6 - (4*direction)) % 8] = bottom[i];
+ }
+ for (int i = 0; i < 8; i++) {
+ bottom[i] = temp1[i];
+ }
+ 
+ if(direction == 1) {
+ for (int i = 4; i < 7; i ++) {
+ temp2 = back[i];
+ back[i] = right[i];
+ right[i] = front[i];
+ front[i] = left[i];
+ left[i] = temp2;
+ }
+ }
+ else {
+ for (int i = 4; i < 7; i ++) {
+ temp2 = back[i];
+ back[i] = left[i];
+ left[i] = front[i];
+ front[i] = right[i];
+ right[i] = temp2;
+ }
+ }
+ }
+ 
+ public void shuffleCube() {
+ Random gen = new Random();
+ for (int i = 0; i < 20; i ++) {
+ int r = gen.nextInt(6);
+ int d = gen.nextInt(2);
+ switch(r) {
+ case 0: turnFaceBottom(d); break;
+ case 1: turnFaceTop(d); break;
+ case 2: turnFaceFront(d); break;
+ case 3: turnFaceRight(d); break;
+ case 4: turnFaceLeft(d); break;
+ case 5: turnFaceBack(d); break;
+ }
+ }
+ }
+ 
+ public void printCube() {
+ System.out.println("top:\n" + top[0] + " " + top[1] + " " + top[2] + "\n" + top[7] + " 0 " + top[3] + "\n" + top[6] + " " + top[5] + " " + top[4]);
+ System.out.println("front:\n" + front[0] + " " + front[1] + " " + front[2] + "\n" + front[7] + " 2 " + front[3] + "\n" + front[6] + " " + front[5] + " " + front[4]);
+ System.out.println("bottom:\n" + bottom[0] + " " + bottom[1] + " " + bottom[2] + "\n" + bottom[7] + " 4 " + bottom[3] + "\n" + bottom[6] + " " + bottom[5] + " " + bottom[4]);
+ }
+ }
  */
