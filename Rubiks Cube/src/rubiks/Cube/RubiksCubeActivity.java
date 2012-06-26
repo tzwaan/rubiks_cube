@@ -1,6 +1,6 @@
 package rubiks.Cube;
 
- 	import android.app.Activity;
+import android.app.Activity;
 import android.opengl.GLSurfaceView;
 import android.os.Bundle;
 import android.view.MotionEvent;
@@ -16,7 +16,7 @@ public class RubiksCubeActivity extends Activity implements OnTouchListener {
 	private float prevX, prevY;
 	public static float deltaX, deltaY;
 	public static CubeRenderer renderer = new CubeRenderer(cube);
-    Button button_left, button_face, button_right;
+    /*Button button_left, button_face, button_right;
 
     public void addListenerOnButton_left(){
     	button_left = (Button) findViewById(R.id.button_left);
@@ -47,20 +47,20 @@ public class RubiksCubeActivity extends Activity implements OnTouchListener {
 		    		System.out.println("CONJOOOO PATRICK!");
 			    }
 	    	});
-	  }
+	  }*/
 	
 	@Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        
         GLSurfaceView view = new GLSurfaceView(this);
         view.setRenderer(renderer);
         setContentView(view);
-        
-        addListenerOnButton_left();
-        addListenerOnButton_face();
-        addListenerOnButton_right();
-        
+
+        //addListenerOnButton_left();
+        //addListenerOnButton_face();
+        //addListenerOnButton_right();
+        //System.out.println("POEP");
+
         view.setOnTouchListener(new OnTouchListener(){
 	        @Override
 	    	public boolean onTouch(View v, MotionEvent event) {
